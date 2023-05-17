@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\V1\TaskController;
 use App\Http\Controllers\Api\V1\SkillController;
 
 /*
@@ -21,6 +22,7 @@ use App\Http\Controllers\Api\V1\SkillController;
 
 Route::prefix('v1')->middleware('auth:sanctum')->group(function () {
     Route::apiResource('skills', SkillController::class);
+    Route::apiResource('tasks', TaskController::class);
 });
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
