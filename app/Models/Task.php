@@ -11,7 +11,7 @@ class Task extends Model
     use HasFactory;
     use Sluggable;
 
-    protected $fillable = ['title', 'description', 'status'];
+    protected $fillable = ['title', 'description', 'status', 'user_id'];
 
     public function sluggable(): array
     {

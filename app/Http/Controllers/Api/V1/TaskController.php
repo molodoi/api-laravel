@@ -8,15 +8,14 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Resources\V1\TaskResource;
 use App\Http\Resources\V1\TaskCollection;
-use App\Models\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class TaskController extends Controller
 {
-    public function index(User $user): ResourceCollection
+    public function index(): ResourceCollection
     {
-        return new TaskCollection(Task::where('user_id', auth()->user()->id)->get());
+        return new TaskCollection(Task::where('user_id', auth()->user()->id)->orderBy('created_at', 'DESC')->paginate(3));
     }
 
     public function show(Task $task): JsonResource
@@ -24,10 +23,10 @@ class TaskController extends Controller
         return new TaskResource($task);
     }
 
-    public function store(StoreTaskRequest $request): JsonResponse
+    public function store(StoreTaskRequest $request): JsonResource
     {
-        Task::create($request->validated());
-        return response()->json("Task Created");
+        $created = Task::create($request->validated() + ['user_id' => auth()->id()]);
+        return new TaskResource($created);
     }
 
     public function update(StoreTaskRequest $request, Task $task): JsonResponse
@@ -36,9 +35,16 @@ class TaskController extends Controller
         return response()->json("Task Updated");
     }
 
-    public function destroy(Task $task)
+    public function destroy(Task $task): JsonResponse
     {
         $task->delete();
         return response()->json("Task Deleted");
+    }
+
+    public function updateStatus(Task $task): JsonResponse
+    {        
+        $task->status = $task->status === 1 ? 0 : 1;
+        $task->save();
+        return response()->json("Status updated");
     }
 }

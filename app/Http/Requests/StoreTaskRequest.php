@@ -22,7 +22,8 @@ class StoreTaskRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => ['required', 'min:3', 'max:20'],
+            'title' => ['required', 'min:3'],
+            'description' => ['nullable'],
         ];
     }
 }

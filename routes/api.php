@@ -21,7 +21,7 @@ use App\Http\Controllers\Api\V1\SkillController;
 // });
 
 Route::prefix('v1')->middleware('auth:sanctum')->group(function () {
-    Route::apiResource('skills', SkillController::class);
+    Route::put('/tasks/status/{task}', [TaskController::class, 'updateStatus'])->name('tasks.updateStatus');
     Route::apiResource('tasks', TaskController::class);
 });
 
