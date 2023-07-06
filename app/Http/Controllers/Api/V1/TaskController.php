@@ -13,6 +13,12 @@ use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class TaskController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->authorizeResource(Task::class, 'task');
+    }
+
     public function index(): ResourceCollection
     {
         return new TaskCollection(Task::where('user_id', auth()->user()->id)->orderBy('created_at', 'DESC')->paginate(3));
